@@ -19,6 +19,6 @@ app.get('/api/chat/:id', (req, res) => {
     res.send(singleChat);
 });
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8000;
 
-app.listen(8080, () => console.log(`Server running on port ${PORT}`));
+app.listen(8000, () => console.log(`Server running on port ${PORT}`));

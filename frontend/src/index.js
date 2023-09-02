@@ -10,7 +10,7 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <ChakraProvider>
-        <App />   
+        <App />
         {/* App.js의 App 컴포넌트가 렌더링 된다. */}
       </ChakraProvider>
     </BrowserRouter>
