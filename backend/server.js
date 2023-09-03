@@ -1,9 +1,14 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const chats = require('./data/data');
+const connectDB = require('./config/db');
+const colors = require('colors');
+
+dotenv.config(); // .env 파일에 있는 환경변수를 process.env에 넣어줌.
+
+connectDB();
 
 const app = express();
-dotenv.config(); // .env 파일에 있는 환경변수를 process.env에 넣어줌.
 
 app.get('/', (req, res) => {
     res.send('API is running...');
@@ -21,4 +26,4 @@ app.get('/api/chat/:id', (req, res) => {
 
 const PORT = process.env.PORT || 8000;
 
-app.listen(8000, () => console.log(`Server running on port ${PORT}`));
+app.listen(8000, () => console.log(`Server running on port ${PORT}`.yellow.bold));

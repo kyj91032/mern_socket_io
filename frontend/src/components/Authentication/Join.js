@@ -6,7 +6,6 @@ const Join = () => {
     const [name, setName] = useState();
     const [password, setPassword] = useState();
     const [show, setShow] = useState(false);
-    const [pic, setPic] = useState();
 
     const handlePasswordVisibility = () => {
         setShow(!show);
