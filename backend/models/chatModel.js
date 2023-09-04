@@ -18,7 +18,7 @@ const chatScheme = mongoose.Schema({
 {
     timestamps: true // createdAt, updatedAt 필드를 자동으로 생성함.
 }   
-); // 스키마 생성. 스키마는 데이터의 구조를 정의하는 것.
+); // 스키마 생성.
 
 const Chat = mongoose.model('Chat', chatScheme); // 스키마를 기반으로 모델 생성.
 
