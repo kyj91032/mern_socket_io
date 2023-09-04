@@ -39,7 +39,25 @@ const registerUser = asyncHandler( async (req, res) => { // asyncHandler는 에�
     }
 });
 
+const authUser = asyncHandler( async (req, res) => {
+    const {name, password} = req.body;
+
+    const user = await User.findOne({name});
+
+    if (user && (await user.matchPassword(password))) { // user가 존재하고, password가 일치하면
+        res.json({
+            _id: user._id,
+            name: user.name,
+            password: user.password,
+            token: generateToken(user._id),
+        })
+    } else {
+        res.status(401);
+        throw new Error('Invalid name or password');
+    }
+});
 
 
 
-module.exports = { registerUser };
+
+module.exports = { registerUser, authUser };
