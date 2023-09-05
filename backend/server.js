@@ -7,17 +7,19 @@ const userRoutes = require('./routes/userRoutes');
 
 dotenv.config(); // .env 파일에 있는 환경변수를 process.env에 넣어줌.
 
-connectDB();
+connectDB(); // db 연결
 
 const app = express();
 
-app.use(express.json()); // req.body에 접근할 수 있게 해줌. (미들웨어 함수
+app.use(express.json()); // http 요청의 body를 json 형태로 파싱해줌.
 
 app.get('/', (req, res) => {
     res.send('API is running...');
 });
 
-app.use('/api/user', userRoutes); // /api/user로 요청이 들어오면 userRoutes로 보내줌. use 메소드는 미들웨어 함수를 사용할 때
+app.use('/api/user', userRoutes); // /api/user로 요청이 들어오면 userRoutes로 보내줌. use 메소드는 요청에 대한 미들웨어 함수를 사용하는 메소드.
+
+
 
 const PORT = process.env.PORT || 8000;
 

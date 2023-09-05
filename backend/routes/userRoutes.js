@@ -1,9 +1,8 @@
 const express = require('express');
-const { registerUser, authUser } = require('../controller/userController');
+const { joinUser } = require('../controller/userController');
 
 const router = express.Router(); // 라우터 객체 생성.
 
-router.route('/').post(registerUser); // /api/user로 post 요청을 보냈을 때 registerUser 함수 실행.
-router.post('/login', authUser);
+router.post('/join', joinUser); // /api/user/join으로 post 요청을 보냈을 때 joinUser 함수 실행.
 
 module.exports = router;
