@@ -24,7 +24,7 @@ const joinUser = asyncHandler( async (req, res) => {
             console.log("로그인 성공");
         } else {
             res.status(401);
-            throw new Error('Invalid name or password');
+            throw new Error('Invalid name or password'); // asyncHandler가 에러를 next로 넘겨줌. 그 후 errorHandler가 에러를 받아서 처리.
         }
 
     } else { // user가 존재하지 않으면 (회원가입)
