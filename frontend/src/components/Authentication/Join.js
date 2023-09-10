@@ -16,7 +16,7 @@ const Join = () => {
         setShow(!show);
     };
 
-    const submitHandler = async () => {
+    const submitHandler = async () => { // 데이터가 백엔드의 req로 들어감. axios를 사용해서 백엔드로 데이터를 보내줌.
         setLoading(true);
         if (!name || !password) {
             toast({
@@ -71,7 +71,7 @@ const Join = () => {
     };
 
     return (
-        <VStack spacing='5px'>
+        <VStack spacing='20px'>
             <FormControl id='name' isRequired>
                 <FormLabel>닉네임</FormLabel>
                 <Input 
@@ -100,6 +100,7 @@ const Join = () => {
                 width='100%'
                 style={{marginTop: 15}}
                 onClick={submitHandler}
+                bgColor={'facebook.300'}
             >
                 참가하기
             </Button>

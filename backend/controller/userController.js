@@ -2,6 +2,8 @@ const asyncHandler = require('express-async-handler');
 const User = require('../models/userModel');
 const generateToken = require('../config/generateToken');
 
+// 복잡한 비즈니스 로직이 아니기 때문에 service를 따로 만들지 않고 controller에서 바로 처리.
+
 
 const joinUser = asyncHandler( async (req, res) => {
     const {name, password} = req.body; // express.json() 미들웨어를 사용했기 때문에 req.body에 접근 가능.
@@ -49,4 +51,18 @@ const joinUser = asyncHandler( async (req, res) => {
 });
 
 
-module.exports = { joinUser };
+const allUsers = asyncHandler( async (req, res) => {
+
+    const keyword = req.query.search ? { // req.query는 쿼리스트링을 파싱한 객체
+        $or: [
+            { name : { $regex: req.query.search, $options: 'i' } }, // 정확한 문자열이 아니어도 검색 가능하도록 정규표현식 사용.
+        ]
+    } : {} // 쿼리스트링이 없으면 빈 객체를 반환.
+
+    const users = await User.find(keyword);
+    res.send(users);
+
+});
+
+
+module.exports = { joinUser, allUsers };

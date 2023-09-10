@@ -17,17 +17,10 @@ const Homepage = () => {
       >
         <Text fontSize='2xl' fontFamily='Work sans' align='center'>OpenCommunity</Text>
       </Box>
-      <Box bg='white' w='100%' p='4' borderRadius='lg' borderWidth='1px'>
-        <Tabs variant='soft-rounded' colorScheme='facebook'>
-          <TabList mb='1em'>
-            <Tab width='100%'>로그인 및 회원가입</Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel>
-              <Join />
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
+      <Box bg='white' w='100%' p='8' borderRadius='lg' borderWidth='1px'>
+
+        <Join />
+           
       </Box>
     </Container>
   )
