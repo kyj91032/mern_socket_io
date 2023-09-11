@@ -59,7 +59,7 @@ const allUsers = asyncHandler( async (req, res) => {
         ]
     } : {} // 쿼리스트링이 없으면 빈 객체를 반환.
 
-    const users = await User.find(keyword);
+    const users = await User.find(keyword).find({_id: {$ne: req.user._id}});
     res.send(users);
 
 });
