@@ -7,11 +7,13 @@ const chatScheme = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User'
     }], // User 스키마의 id를 참조함. mongoose에서 지원하는 외래키.
+    // 결국 필드의 실제 데이터는 populate해서 불러옴.
     latestMessage: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'Message'
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Message'
     },
     groupAdmin: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId, 
         ref: 'User'
     }
 },

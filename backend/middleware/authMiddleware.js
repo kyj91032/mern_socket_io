@@ -18,6 +18,7 @@ const protect = asyncHandler(async(req, res, next) => {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
             req.user = await User.findById(decoded.id).select('-password'); // password를 제외한 나머지 정보를 req.user에 넣어줌.
+            // req.user는 이후 라우터에서 사용할 수 있음.
 
             next(); // 다음 미들웨어로 넘어감.
 
