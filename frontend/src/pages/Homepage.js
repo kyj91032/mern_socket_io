@@ -15,7 +15,7 @@ const Homepage = () => {
         borderRadius="lg"
         borderWidht="1px"
       >
-        <Text fontSize='2xl' fontFamily='Work sans' align='center'>OpenCommunity</Text>
+        <Text fontSize='2xl' fontFamily='Work sans' align='center'>TCP-IP</Text>
       </Box>
       <Box bg='white' w='100%' p='8' borderRadius='lg' borderWidth='1px'>
 

@@ -6,7 +6,7 @@ const generateToken = require('../config/generateToken');
 
 
 const joinUser = asyncHandler( async (req, res) => {
-    const {name, password} = req.body; // express.json() 미들웨어를 사용했기 때문에 req.body에 접근 가능.
+    const {name, password} = req.body; // req.body에 name과 password가 들어있음.
 
     if (!name || !password) { // 유효성 검사 (name과 password가 존재하는지)
         res.status(400);

@@ -55,7 +55,7 @@ const Join = () => {
 
             setLoading(false);
 
-            history.push('/chats') // /chats로 이동.
+            history.push('/chat') // /chat로 이동.
 
         } catch (error) {
             toast({
