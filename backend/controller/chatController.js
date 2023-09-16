@@ -68,4 +68,42 @@ const fetchChats = asyncHandler( async (req, res) => {
     }
 });
 
-module.exports = { accessChat, fetchChats };
+const createGroupChat = asyncHandler( async (req, res) => {
+
+    if (!req.body.users || !req.body.name) { // front에서 보낸 데이터가 없는 경우.
+        return res.status(400).send({ message: "Please Fill all the fields" });
+    }
+
+    var users = JSON.parse(req.body.users); // front에서 보낸 users 데이터를 javascript object로 변환.
+    // JSON.stringify()와 대응
+
+    if (users.length < 2) {
+        return res
+            .status(400)
+            .send({ message: "Please add more than 2 users to create a group" });
+    }
+
+    users.push(req.user); // 현재 로그인한 유저도 그룹에 추가.
+
+    try {
+        const groupChat = await Chat.create({ // 채팅 생성.
+            chatName: req.body.name,
+            users: users,
+            isGroupChat: true,
+            groupAdmin: req.user,
+        });
+
+        const fullGroupChat = await Chat.findOne({ _id: groupChat._id }) // 추가적인 정보를 넣어줌.
+            .populate("users", "-password")
+            .populate("groupAdmin", "-password");
+
+        res.status(200).send(fullGroupChat);
+
+    } catch (error) {
+        res.status(400);
+        throw new Error(error.message);
+    }
+
+});
+
+module.exports = { accessChat, fetchChats, createGroupChat };
