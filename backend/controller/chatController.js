@@ -47,7 +47,6 @@ const accessChat = asyncHandler( async (req, res) => {
     }
 });
 
-
 const fetchChats = asyncHandler( async (req, res) => {
     try {
         // 현재 로그인한 유저가 속한 채팅방을 모두 불러옴.
@@ -106,4 +105,24 @@ const createGroupChat = asyncHandler( async (req, res) => {
 
 });
 
-module.exports = { accessChat, fetchChats, createGroupChat };
+const renameGroup = asyncHandler( async (req, res) => {
+    const { chatId, chatName } = req.body;
+
+    const updatedChat = await Chat.findByIdAndUpdate(
+        chatId,
+        {
+            chatName, // 새로운 chatName.
+        },
+        { 
+            new: true
+        }
+    ).populate("users", "-password").populate("groupAdmin", "-password");
+
+    if (!updatedChat) {
+        return res.status(400).send({ message: "Chat not found" });
+    } else {
+        res.status(200).send(updatedChat);
+    }
+});
+
+module.exports = { accessChat, fetchChats, createGroupChat, renameGroup };
