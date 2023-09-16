@@ -125,4 +125,44 @@ const renameGroup = asyncHandler( async (req, res) => {
     }
 });
 
-module.exports = { accessChat, fetchChats, createGroupChat, renameGroup };
+const addToGroup = asyncHandler( async (req, res) => {
+    const { chatId, userId } = req.body;
+
+    const added = await Chat.findByIdAndUpdate(
+        chatId,
+        {
+            $push: { users: userId }, // users 베열에 userId 추가.
+        },
+        {
+            new: true
+        }
+    ).populate("users", "-password").populate("groupAdmin", "-password"); // join(populate)을 통해 users와 groupAdmin의 정보를 가져옴.
+
+    if (!added) {
+        return res.status(400).send({ message: "Chat not found" });
+    } else {
+        res.status(200).send(added);
+    }
+});
+
+const removeFromGroup = asyncHandler( async (req, res) => {
+    const { chatId, userId } = req.body;
+
+    const removed = await Chat.findByIdAndUpdate(
+        chatId,
+        {
+            $pull: { users: userId }, // users 베열에 userId 제거.
+        },
+        { 
+            new: true 
+        }
+    ).populate("users", "-password").populate("groupAdmin", "-password"); // join(populate)을 통해 users와 groupAdmin의 정보를 가져옴.
+
+    if (!removed) {
+        return res.status(400).send({ message: "Chat not found" });
+    } else {
+        res.status(200).send(removed);
+    }
+});
+
+module.exports = { accessChat, fetchChats, createGroupChat, renameGroup, addToGroup, removeFromGroup };
