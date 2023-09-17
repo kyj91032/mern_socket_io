@@ -1,8 +1,19 @@
 import { Box, Container, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Join from '../components/Authentication/Join'
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const Homepage = () => {
+
+  const history = useHistory();
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("userInfo"));
+
+    if (user) history.push('/chat'); // 로그인이 되어있으면 바로 채팅방으로 이동
+
+  }, [history]); // homepage에서 경로 변경이 될 때마다 user를 확인.
+
   return (
     <Container maxX='xl' centerContent maxWidth='500px'>
       <Box
