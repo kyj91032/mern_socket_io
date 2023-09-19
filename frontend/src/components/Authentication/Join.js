@@ -1,7 +1,7 @@
 import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, VStack, useToast } from '@chakra-ui/react'
 import axios from 'axios';
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Join = () => {
 
@@ -10,7 +10,7 @@ const Join = () => {
     const [show, setShow] = useState(false);
     const [loading, setLoading] = useState(false);
     const toast = useToast();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const handlePasswordVisibility = () => {
         setShow(!show);
@@ -55,7 +55,7 @@ const Join = () => {
 
             setLoading(false);
 
-            history.push('/chat') // /chat로 이동.
+            navigate('/chat') // /chat로 이동.
 
         } catch (error) {
             toast({
