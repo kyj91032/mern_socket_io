@@ -5,6 +5,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons'; // 필요한 아�
 import { BellIcon, ChevronDownIcon } from '@chakra-ui/icons'
 import { ChatState } from "../../context/ChatProvider"
 import ProfileModal from './ProfileModal';
+import { useNavigate } from 'react-router-dom';
 
 const SideDrawer = () => {
 
@@ -14,6 +15,13 @@ const SideDrawer = () => {
     const [loadingChat, setLoadingChat] = useState(false);
 
     const { user } = ChatState();
+
+    const navigate = useNavigate();
+
+    const logoutHandler = () => {
+        localStorage.removeItem('userInfo');
+        navigate('/');
+    }
 
     return <>
         <Box
@@ -57,7 +65,7 @@ const SideDrawer = () => {
                         <ProfileModal user={user}>
                             <MenuItem>내 프로필</MenuItem>
                         </ProfileModal>
-                        <MenuItem>로그아웃</MenuItem>
+                        <MenuItem onClick={logoutHandler}>로그아웃</MenuItem>
                     </MenuList>
                 </Menu>
             </span>
