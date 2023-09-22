@@ -18,7 +18,6 @@ const Chatpage = () => {
       </Box>
     </div>
   )
-
 }
 
 export default Chatpage

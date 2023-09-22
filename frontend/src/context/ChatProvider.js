@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
-const ChatContext = createContext();
+const ChatContext = createContext(); // ContextAPI 정의
 
 const ChatProvider = ({ children }) => {
 

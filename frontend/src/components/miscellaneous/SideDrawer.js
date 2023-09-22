@@ -1,8 +1,10 @@
-import { Box, Button, Text, Tooltip, Menu, MenuButton, MenuList } from '@chakra-ui/react';
+import { Box, Button, Text, Tooltip, Menu, MenuButton, MenuList, MenuItem, Avatar } from '@chakra-ui/react';
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons'; // 필요한 아이콘을 추가합니다.
-import { BellIcon } from '@chakra-ui/icons'
+import { BellIcon, ChevronDownIcon } from '@chakra-ui/icons'
+import { ChatState } from "../../context/ChatProvider"
+import ProfileModal from './ProfileModal';
 
 const SideDrawer = () => {
 
@@ -10,6 +12,8 @@ const SideDrawer = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(false);
     const [loadingChat, setLoadingChat] = useState(false);
+
+    const { user } = ChatState();
 
     return <>
         <Box
@@ -46,12 +50,18 @@ const SideDrawer = () => {
                     </MenuList> */}
                 </Menu>
                 <Menu>
-                    <MenuButton p={1}>
-                        <BellIcon fontSize='2xl' m={1}/>
+                    <MenuButton as={Button} rightIcon={<ChevronDownIcon/>}>
+                        <Avatar size='sm' cursor='pointer' name={user.name} src={user.pic}  />
                     </MenuButton>
+                    <MenuList>
+                        <ProfileModal user={user}>
+                            <MenuItem>내 프로필</MenuItem>
+                        </ProfileModal>
+                        <MenuItem>로그아웃</MenuItem>
+                    </MenuList>
                 </Menu>
             </span>
-            
+
         </Box>
     </>
     
