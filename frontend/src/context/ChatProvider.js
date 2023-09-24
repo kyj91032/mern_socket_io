@@ -10,7 +10,7 @@ const ChatProvider = ({ children }) => {
 
     const [user, setUser] = useState(); // 로그인한 유저
     const [selectedChat, setSelectedChat] = useState(); // 선택된 채팅방
-    const [chats, setChats] = useState(); // 채팅방 목록
+    const [chats, setChats] = useState([]); // 채팅방 목록
   
     useEffect(() => {
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));

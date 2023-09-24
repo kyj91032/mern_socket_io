@@ -1,4 +1,4 @@
-import { Box, Button, Text, Tooltip, Menu, MenuButton, MenuList, MenuItem, Avatar, Drawer, useDisclosure, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, Input, Toast, useToast } from '@chakra-ui/react';
+import { Box, Button, Text, Tooltip, Menu, MenuButton, MenuList, MenuItem, Avatar, Drawer, useDisclosure, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, Input, useToast, Spinner } from '@chakra-ui/react';
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons'; // 필요한 아이콘을 추가합니다.
@@ -7,7 +7,6 @@ import { ChatState } from "../../context/ChatProvider"
 import ProfileModal from './ProfileModal';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { set } from 'mongoose';
 import ChatLoading from '../ChatLoading';
 import UserListItem from '../UserAvatar/UserListItem';
 
@@ -39,7 +38,7 @@ const SideDrawer = () => {
                 duration: 2000,
                 isClosable: true,
                 position: 'top-left',
-                colorScheme: 'blackAlpha'
+                colorScheme: 'blackAlpha'   
             });
             return;
         }
@@ -79,7 +78,11 @@ const SideDrawer = () => {
                 }
             };
 
-            const {data} = await axios.post('/api/chat', {userId}, config);
+            const {data} = await axios.post('/api/chat', {userId}, config); // 이미 있으면 해당 채팅방을 가져옴. 없으면 새로운 채팅방을 만듦.
+
+            if (!chats.find((c) => c._id === data._id)) { // 채팅방 목록에 이미 있는 채팅방인지 확인. 없으면 새로운 채팅방을 추가.
+                setChats([data, ...chats]); // 채팅방 목록에 새로운 채팅방을 추가.
+            }
 
             setSelectedChat(data);
             setLoadingChat(false);
@@ -93,7 +96,7 @@ const SideDrawer = () => {
                 isClosable: true,
                 position: 'bottom-left',
             });
-            
+
         }
     };
 
@@ -105,7 +108,7 @@ const SideDrawer = () => {
             justifyContent='space-between'
             alignItems='center'
             bg='gray.200'
-            w='100%'
+            w='100%'    
             p='5px 10px 5px 10px'
             borderRadius='10px'
         >
@@ -163,10 +166,11 @@ const SideDrawer = () => {
                             <UserListItem
                                 key={user._id}
                                 user={user}
-                                handleFucntion={()=>accessChat(user._id)}
+                                handleFunction={()=>accessChat(user._id)}
                             />
                         ))
                     )}
+                    {loadingChat && <Spinner ml='auto' display='flex'/>}
                 </DrawerBody>
             </DrawerContent>
         </Drawer>
