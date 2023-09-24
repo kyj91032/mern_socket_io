@@ -17,7 +17,7 @@ const Homepage = () => {
   return (
     <Container centerContent maxWidth='500px'>
       <Box
-        d='flex'
+        display='flex'
         justifyContent='center'
         p='3'
         bg="white"
