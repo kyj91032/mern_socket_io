@@ -5,6 +5,7 @@ import axios from 'axios';
 import { AddIcon } from '@chakra-ui/icons';
 import ChatLoading from './ChatLoading';
 import { getSender } from '../config/ChatLogic';
+import GroupChatModal from './miscellaneous/GroupChatModal';
 
 const MyChats = () => {
 
@@ -63,7 +64,7 @@ const MyChats = () => {
         alignItems="center"
       >
         내 채팅
-        
+        <GroupChatModal>
           <Button
             display="flex"
             fontSize={{ base: "17px", md: "10px", lg: "17px" }}
@@ -71,7 +72,7 @@ const MyChats = () => {
           >
             채팅방 만들기
           </Button>
-        
+        </GroupChatModal>
       </Box>
 
       <Box
