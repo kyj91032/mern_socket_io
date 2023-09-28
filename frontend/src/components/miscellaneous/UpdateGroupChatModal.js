@@ -6,7 +6,7 @@ import UserBadgeItem from '../UserAvatar/UserBadgeItem';
 import axios from 'axios';
 import UserListItem from '../UserAvatar/UserListItem';
 
-const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
+const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -50,6 +50,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
 
             user1._id === user._id ? setSelectedChat() : setSelectedChat(data); // 자기 자신이 나가면 선택된 채팅방 없도록
             setFetchAgain(!fetchAgain);
+            fetchMessages(); // 메시지 다시 불러오기
             setLoading(false);
         } catch (error) {
             toast({
