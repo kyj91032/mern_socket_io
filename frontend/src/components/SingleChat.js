@@ -1,14 +1,55 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ChatState } from '../context/ChatProvider'
-import { Box, IconButton, Text } from '@chakra-ui/react';
+import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { getSender, getSenderFull } from '../config/ChatLogic';
 import ProfileModal from './miscellaneous/ProfileModal';
 import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal';
+import axios from 'axios';
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
+    const [messages, setMessages] = useState([]); // 전체 메시지
+    const [loading, setLoading] = useState(false);
+    const [newMessage, setNewMessage] = useState(""); // 보낼 메시지
+
     const { user, selectedChat, setSelectedChat } = ChatState();
+
+    const toast = useToast();
+
+    const sendMessage = async (e) => {
+        if(e.key === "Enter" && newMessage) {
+            try {
+                const config = {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                };
+
+                setNewMessage(""); // 메시지 보내고 나면 메시지 창 비워줌. 비동기 처리를 위해 먼저 비워줌.
+
+                const { data } = await axios.post('/api/message', { // 채팅 저장 api 연결
+                    content: newMessage,
+                    chatId: selectedChat._id,
+                }, config); 
+                
+                console.log(data);
+
+                
+                setMessages([...messages, data]); // 전체 메세지에 추가
+
+            } catch (error) {
+                
+            }
+        }
+    };
+
+    const typingHandler = (e) => {
+        setNewMessage(e.target.value);
+
+
+    };
 
     return (
         <>
@@ -57,9 +98,30 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                         borderRadius="lg"
                         overflowY="hidden"
                     >
-                        {/* Messages Here */}
+                    {!loading ? (
+                        <Spinner 
+                            size="xl"
+                            w={20}
+                            h={20}
+                            alignSelf="center"
+                            margin="auto"
+                        />
+                    ) : (
+                        <div>
 
-                    </Box>
+                        </div>
+                    )}
+                    <FormControl onKeyDown={sendMessage} isRequired mt={3}>
+                        <Input
+                            variant="filled"
+                            bg="#E0E0E0"
+                            placeholder="메시지를 입력하세요"
+                            onChange={typingHandler}
+                            value={newMessage}
+                        />
+                    </FormControl>
+
+                  </Box>
                 </>
             ) : (
                 <Box display="flex" alignItems="center" justifyContent="center" h="100%">
