@@ -9,6 +9,8 @@ import axios from 'axios';
 import './style.css';
 import ScrollableChat from './ScrollableChat';
 import io from 'socket.io-client';
+import Lottie from "react-lottie";
+import animationData from "./animations/typing.json";
 
 const ENDPOINT = "http://localhost:8000" // socket.io 서버 주소
 var socket, selectedChatCompare;
@@ -21,15 +23,29 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     const [loading, setLoading] = useState(false);
     const [newMessage, setNewMessage] = useState(""); // 보낼 메시지
     const [socketConnected, setSocketConnected] = useState(false); 
+    const [typing, setTyping] = useState(false);
+    const [isTyping, setIsTyping] = useState(false);
+
+    const defaultOptinos = {
+        loop: true,
+        autoplay: true,
+        animationData: animationData,
+        rendererSettings: {
+          preserveAspectRatio: "xMidYMid slice"
+        }
+    }
 
     const { user, selectedChat, setSelectedChat } = ChatState();
 
     useEffect(() => { 
         socket = io(ENDPOINT); // socket.io 서버에 연결 (클라이언트의 io)
         socket.emit('setup', user); // 서버에 setup 이벤트 발생. user 넘겨줌.
-        socket.on('connection', () => {
+        socket.on('connected', () => {
             setSocketConnected(true); // 서버와 연결되면 socketConnected를 true로 바꿔줌.
         })
+        socket.on('typing', () => setIsTyping(true)); // 서버에서 typing 이벤트 발생하면 setIsTyping을 true로 바꿔줌.
+        socket.on('stop typing', () => setIsTyping(false)); // 서버에서 stop typing 이벤트 발생하면 setIsTyping을 false로 바꿔줌.
+
     }, []);
 
     const fetchMessages = async () => {
@@ -86,6 +102,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
     const sendMessage = async (e) => {
         if(e.key === "Enter" && newMessage) {
+            socket.emit('stop Typing', selectedChat._id);
             try {
                 const config = {
                     headers: {
@@ -116,6 +133,24 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     const typingHandler = (e) => {
         setNewMessage(e.target.value);
 
+        if(!socketConnected) return;
+
+        if(!typing) {
+            setTyping(true);
+            socket.emit('typing', selectedChat._id); // 서버에 typing 이벤트 발생시킴. 채팅방 id 넘겨줌.
+
+        }
+        let lastTypingTime = new Date().getTime();
+        var timerLength = 3000;
+        setTimeout(() => {
+            var timeNow = new Date().getTime();
+            var timeDiff = timeNow - lastTypingTime;
+
+            if(timeDiff >= timerLength && typing) {
+                socket.emit('stop typing', selectedChat._id)
+                setTyping(false);
+            }
+        }, timerLength);
 
     };
 
@@ -181,6 +216,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                         </div>
                     )}
                     <FormControl onKeyDown={sendMessage} isRequired mt={3}>
+                        {isTyping ? <div>
+                            <Lottie options={defaultOptinos} width={70} style={{marginBottom: 15, marginLeft: 0}} />
+                        </div>:<> </>}
                         <Input
                             variant="filled"
                             bg="#E0E0E0"

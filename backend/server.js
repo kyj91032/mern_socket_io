@@ -51,6 +51,9 @@ io.on('connection', (socket)=>{ // 클라이언트가 socket.io 서버에 접속
         console.log('User join room : ' + room);
     })
 
+    socket.on('typing', (room) => socket.in(room).emit("typing"));
+    socket.on('stop typing', (room) => socket.in(room).emit("stop typing"));
+
     socket.on('new message', (newMessageRecieved) => {
         var chat = newMessageRecieved.chat;
 
