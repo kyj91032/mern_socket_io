@@ -65,4 +65,9 @@ io.on('connection', (socket)=>{ // 클라이언트가 socket.io 서버에 접속
             socket.in(user._id).emit('message recieved', newMessageRecieved); // 메시지를 받을 사람에게 message recieved 이벤트 발생.
         })
     })
+
+    socket.off('setup', () => {
+        console.log('user disconnected');
+        socket.leave(userData._id);
+    })
 })

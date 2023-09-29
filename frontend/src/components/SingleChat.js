@@ -35,7 +35,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         }
     }
 
-    const { user, selectedChat, setSelectedChat } = ChatState();
+    const { user, selectedChat, setSelectedChat, notification, setNotification } = ChatState();
 
     useEffect(() => { 
         socket = io(ENDPOINT); // socket.io 서버에 연결 (클라이언트의 io)
@@ -91,7 +91,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         socket.on("message recieved", (newMessageRecieved) => {
             if(!selectedChatCompare || selectedChatCompare._id !== newMessageRecieved.chat._id) {
                 // 메세지가 온 채팅방이 현재 채팅방이 아닐때
-                
+                if(!notification.includes(newMessageRecieved)){
+                    setNotification([newMessageRecieved, ...notification]);
+                    setFetchAgain(!fetchAgain);
+                }
             } else { // 메세지가 온 채팅방이 현재 채팅방일때
                 setMessages([...messages, newMessageRecieved]);
             }
