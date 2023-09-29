@@ -8,14 +8,29 @@ import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal';
 import axios from 'axios';
 import './style.css';
 import ScrollableChat from './ScrollableChat';
+import io from 'socket.io-client';
+
+const ENDPOINT = "http://localhost:8000" // socket.io 서버 주소
+var socket, selectedChatCompare;
+
+
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
     const [messages, setMessages] = useState([]); // 전체 메시지
     const [loading, setLoading] = useState(false);
     const [newMessage, setNewMessage] = useState(""); // 보낼 메시지
+    const [socketConnected, setSocketConnected] = useState(false); 
 
     const { user, selectedChat, setSelectedChat } = ChatState();
+
+    useEffect(() => { 
+        socket = io(ENDPOINT); // socket.io 서버에 연결 (클라이언트의 io)
+        socket.emit('setup', user); // 서버에 setup 이벤트 발생. user 넘겨줌.
+        socket.on('connection', () => {
+            setSocketConnected(true); // 서버와 연결되면 socketConnected를 true로 바꿔줌.
+        })
+    }, []);
 
     const fetchMessages = async () => {
         if(!selectedChat) return;
@@ -36,6 +51,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
             setMessages(data);
             setLoading(false);
+
+            socket.emit('join chat', selectedChat._id); // 서버에 join chat 이벤트 발생. 채팅방 id 넘겨줌.
         } catch (error) {
             toast({
                 title: "오류!",

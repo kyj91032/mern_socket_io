@@ -29,4 +29,25 @@ app.use(errorHandler); // 일반적인 에러 처리 미들웨어 함수.
 
 const PORT = process.env.PORT || 8000;
 
-app.listen(8000, () => console.log(`Server running on port ${PORT}`.yellow.bold));
+const server = app.listen(8000, () => console.log(`Server running on port ${PORT}`.yellow.bold));
+
+const io = require('socket.io')(server, { // socket.io 서버 생성 (서버의 io)
+    pingTimeout: 60000,
+    cors : {
+        origin: 'http://localhost:3000' // 프론트 서버 주소
+    }
+});
+
+io.on('connection', (socket)=>{ // 클라이언트가 socket.io 서버에 접속하면 connection 이벤트 발생.
+    console.log('connected socket.io');
+
+    socket.on('setup', (userData) => {
+        socket.join(userData._id);
+        socket.emit('connected'); // 클라이언트에게 connected 이벤트 발생.
+    });
+
+    socket.on('join chat', (room) => {
+        socket.join(room);
+        console.log('User join room : ' + room);
+    })
+})
