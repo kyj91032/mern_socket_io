@@ -67,7 +67,20 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
     useEffect(() => {
         fetchMessages();
+
+        selectedChatCompare = selectedChat;
     }, [selectedChat]);
+
+    useEffect(() => {
+        socket.on("message recieved", (newMessageRecieved) => {
+            if(!selectedChatCompare || selectedChatCompare._id !== newMessageRecieved.chat._id) {
+                // 메세지가 온 채팅방이 현재 채팅방이 아닐때
+                
+            } else { // 메세지가 온 채팅방이 현재 채팅방일때
+                setMessages([...messages, newMessageRecieved]);
+            }
+        });
+    }); // 아무것도 없으면 렌더링 될 때마다 실행됨.
 
     const toast = useToast();
 
@@ -90,6 +103,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 
                 console.log(data);
             
+                socket.emit('new message', data); // 서버에 new message 이벤트 발생. data 넘겨줌.
+
                 setMessages([...messages, data]); // 전체 메세지에 추가
 
             } catch (error) {

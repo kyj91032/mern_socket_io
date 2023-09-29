@@ -41,7 +41,7 @@ const io = require('socket.io')(server, { // socket.io 서버 생성 (서버의 
 io.on('connection', (socket)=>{ // 클라이언트가 socket.io 서버에 접속하면 connection 이벤트 발생.
     console.log('connected socket.io');
 
-    socket.on('setup', (userData) => {
+    socket.on('setup', (userData) => { 
         socket.join(userData._id);
         socket.emit('connected'); // 클라이언트에게 connected 이벤트 발생.
     });
@@ -49,5 +49,17 @@ io.on('connection', (socket)=>{ // 클라이언트가 socket.io 서버에 접속
     socket.on('join chat', (room) => {
         socket.join(room);
         console.log('User join room : ' + room);
+    })
+
+    socket.on('new message', (newMessageRecieved) => {
+        var chat = newMessageRecieved.chat;
+
+        if(!chat.users) return console.log('Chat.users not defined');
+
+        chat.users.forEach(user => {
+            if(user._id == newMessageRecieved.sender._id) return; // 메시지를 보낸 사람은 메시지를 받지 않음.
+
+            socket.in(user._id).emit('message recieved', newMessageRecieved); // 메시지를 받을 사람에게 message recieved 이벤트 발생.
+        })
     })
 })
