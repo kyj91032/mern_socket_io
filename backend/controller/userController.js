@@ -21,7 +21,7 @@ const joinUser = asyncHandler( async (req, res) => {
                 _id: user._id,
                 name: user.name,
                 password: user.password,
-                token: generateToken(user._id),
+                token: generateToken(user._id), // user._id 마다의 고유한 token을 생성.
             })
             console.log("로그인 성공");
         } else {
