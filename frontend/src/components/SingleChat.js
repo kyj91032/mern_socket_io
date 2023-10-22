@@ -236,7 +236,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             ) : (
                 <Box display="flex" alignItems="center" justifyContent="center" h="100%">
                 <Text fontSize="3xl" pb={3} fontFamily="Work sans">
-                    Click on a user to start chatting
+                    시작할 채팅을 왼쪽에서 선택하세요
                 </Text>
                 </Box>
             )}

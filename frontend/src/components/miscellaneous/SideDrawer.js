@@ -1,5 +1,5 @@
 import { Box, Button, Text, Tooltip, Menu, MenuButton, MenuList, MenuItem, Avatar, Drawer, useDisclosure, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, Input, useToast, Spinner } from '@chakra-ui/react';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons'; // 필요한 아이콘을 추가합니다.
 import { BellIcon, ChevronDownIcon } from '@chakra-ui/icons'
@@ -124,7 +124,7 @@ const SideDrawer = () => {
             </Tooltip>
             
             <Text fontSize='2xl' fontFamily='Work sans'>
-                TCP-IP
+                Open Study Chat
             </Text>
             
             <div>
@@ -136,7 +136,7 @@ const SideDrawer = () => {
                     <MenuList
                         pl={2}
                     >
-                        {!notification.length && "No new messages"}
+                        {!notification.length && "새로운 메세지가 없습니다"}
                         {notification.map((n) => (
                             <MenuItem key={n._id} onClick={()=> {
                                 setSelectedChat(n.chat);

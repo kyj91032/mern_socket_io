@@ -1,13 +1,13 @@
 import { ViewIcon } from '@chakra-ui/icons';
 import { Button, IconButton, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure } from '@chakra-ui/react';
-import React from 'react'
+import React, { useEffect } from 'react'
 
 const ProfileModal = ({user, children}) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure(); // 모달창을 열고 닫는 기능을 제공하는 useDisclosure hook
 
     return ( <>
-        {children ? (
+        {children ? ( 
             <span onClick={onOpen}>{children}</span>
         ) : (
             <IconButton

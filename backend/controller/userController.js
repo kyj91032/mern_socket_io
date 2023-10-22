@@ -21,6 +21,7 @@ const joinUser = asyncHandler( async (req, res) => {
                 _id: user._id,
                 name: user.name,
                 password: user.password,
+                pic: user.pic,
                 token: generateToken(user._id), // user._id 마다의 고유한 token을 생성.
             })
             console.log("로그인 성공");
@@ -40,6 +41,7 @@ const joinUser = asyncHandler( async (req, res) => {
                 _id: user._id, // user._id는 mongodb에서 자동으로 생성해줌. auto increment. usertable의 primary key와 같은 역할.
                 name: user.name,
                 password: user.password,
+                pic: user.pic,
                 token: generateToken(user._id), // user._id를 인자로 넣어줌. token을 생성하는 함수.
             })
             console.log("회원가입 성공");
