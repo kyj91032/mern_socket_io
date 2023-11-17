@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { ChatState } from '../context/ChatProvider'
 import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@chakra-ui/react';
-import { ArrowBackIcon } from '@chakra-ui/icons';
+import { AddIcon, ArrowBackIcon, ViewIcon } from '@chakra-ui/icons';
 import { getSender, getSenderFull } from '../config/ChatLogic';
 import ProfileModal from './miscellaneous/ProfileModal';
 import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal';
@@ -11,6 +11,9 @@ import ScrollableChat from './ScrollableChat';
 import io from 'socket.io-client';
 import Lottie from "react-lottie";
 import animationData from "./animations/typing.json";
+import ReactMarkdown from 'react-markdown';
+import CodeBlockModal from './CodeBlockModal';
+
 
 const ENDPOINT = "http://localhost:8000" // socket.io 서버 주소
 var socket, selectedChatCompare;
@@ -25,6 +28,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     const [socketConnected, setSocketConnected] = useState(false); 
     const [typing, setTyping] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
+    const [isCodeBlockModalOpen, setCodeBlockModalOpen] = useState(false);
 
     const defaultOptinos = {
         loop: true,
@@ -157,6 +161,40 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
     };
 
+    const handleCodeBlockInsert = () => {
+        setCodeBlockModalOpen(true);
+    };
+
+    const handleCodeBlockSubmit = async (code) => {
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${user.token}`,
+                },
+            };
+
+            // 코드 블록을 메시지로 전송
+            const { data } = await axios.post('/api/message', {
+                content: `\`\`\`${code}\`\`\``,
+                chatId: selectedChat._id,
+            }, config);
+
+            // 서버에도 코드 블록을 전송
+            socket.emit('new message', data);
+
+            // 메시지 목록 갱신
+            setMessages([...messages, data]);
+
+            // 모달 닫기
+            setCodeBlockModalOpen(false);
+
+        } catch (error) {
+            console.error('코드 블록 전송 실패:', error);
+        }
+    };
+
+
     return (
         <>
             {selectedChat ? (
@@ -226,6 +264,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                         {isTyping ? <div>
                             <Lottie options={defaultOptinos} width={70} style={{marginBottom: 15, marginLeft: 0}} />
                         </div>:<> </>}
+                        <IconButton
+                            mb={2} // 필요에 따라 여백 조절
+                            colorScheme="gray"
+                            aria-label="코드 블록 삽입"
+                            icon={<AddIcon/>} // 사용하고 싶은 아이콘으로 대체 가능
+                            onClick={() => handleCodeBlockInsert()} // 코드 블록 삽입 함수 호출
+                        />
                         <Input
                             variant="filled"
                             bg="#E0E0E0"
@@ -233,8 +278,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                             onChange={typingHandler}
                             value={newMessage}
                         />
+                        
                     </FormControl>
-
+                    <CodeBlockModal isOpen={isCodeBlockModalOpen} onClose={() => setCodeBlockModalOpen(false)} onSubmit={handleCodeBlockSubmit} />
                   </Box>
                 </>
             ) : (
