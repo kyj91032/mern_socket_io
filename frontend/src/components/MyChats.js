@@ -100,7 +100,7 @@ const MyChats = ({fetchAgain}) => {
               >
                 <Text>
                   {!chat.isGroupChat
-                    ? getSender(loggedUser, chat.users)
+                    ? getSender(loggedUser, chat.users) +" 님과의 채팅"
                     : chat.chatName}
                 </Text>
                 {chat.latestMessage && (

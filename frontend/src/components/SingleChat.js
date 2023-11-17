@@ -179,12 +179,16 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                         />
                         {!selectedChat.isGroupChat ? ( // 그룹 채팅이 아니면
                             <>
-                                {getSender(user, selectedChat.users)} 님과의 채팅
+                                <Text fontSize={{ base : "20px"}}>
+                                    {getSender(user, selectedChat.users)} 님과의 채팅
+                                </Text>
                                 <ProfileModal user={getSenderFull(user, selectedChat.users)}/>
                             </>
                         ) : (
                             <>
-                                {selectedChat.chatName.toUpperCase()} 채팅방
+                                <Text fontSize={{ base : "20px"}}>
+                                    {selectedChat.chatName.toUpperCase()}
+                                </Text>
                                 <UpdateGroupChatModal
                                     fetchAgain={fetchAgain}
                                     setFetchAgain={setFetchAgain}

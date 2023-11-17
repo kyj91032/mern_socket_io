@@ -52,7 +52,7 @@ io.on('connection', (socket)=>{ // 클라이언트가 socket.io 서버에 접속
     })
 
     socket.on('typing', (room) => socket.in(room).emit("typing"));
-    socket.on('stop typing', (room) => socket.in(room).emit("stop typing"));
+    socket.on('stop typing', (room) => socket.in(room).emit("stop typing")); // in은 topic을 지정해줌. (특정 채팅방에만 이벤트를 발생시키고 싶을 때)
 
     socket.on('new message', (newMessageRecieved) => {
         var chat = newMessageRecieved.chat;

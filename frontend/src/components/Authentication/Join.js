@@ -25,7 +25,7 @@ const Join = () => {
                 duration: 3000,
                 isClosable: true,
                 position: 'top',
-                colorScheme: 'white'
+                colorScheme: 'blackAlpha'
             });
             setLoading(false);
             return;
